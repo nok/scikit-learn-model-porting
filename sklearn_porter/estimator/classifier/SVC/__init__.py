@@ -29,6 +29,13 @@ class SVC(Classifier):
             'arr[][]':  '{type} {name}[{n}][{m}] = {{{values}}};',
             'indent':   '    ',
         },
+        'pascal': {
+            'type':     '{0}',
+            'arr':      '({0})',
+            'arr[]':    '{name}: array[0..{n}-1] of {type} = ({values});',
+            'arr[][]':  '{name}: array[0..{n}-1,0..{m}-1] of {type} = ({values});',
+            'indent':   '    ',
+        },
         'java': {
             'type':     '{0}',
             'arr':      '{{{0}}}',
@@ -130,7 +137,7 @@ class SVC(Classifier):
         self.n_svs_rows = len(est.n_support_)
 
         self.weights = self.temp('arr[]', skipping=True).format(
-            type='int', name='weights', values=', '.join([str(e) for e in
+            type='int' if self.target_language!='pascal' else 'Integer', name='weights', values=', '.join([str(e) for e in
                                                           self.svs_rows]),
             n=len(self.svs_rows))
         self.n_weights = len(self.svs_rows)
